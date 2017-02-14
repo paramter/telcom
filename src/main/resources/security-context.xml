@@ -17,7 +17,7 @@
 		<csrf disabled="true" />
 		<!-- 指定登录地址、登录请求字段以及登录成功|失败的响应页面 -->
 		<form-login login-page="/index.jsp" 
-			login-processing-url="login"	
+			login-processing-url="/j_spring_security_check"	
 			username-parameter="loginName"
 			password-parameter="loginPwd"
 			authentication-failure-handler-ref="authenticationFailureHandlerImpl"
@@ -34,22 +34,22 @@
 		<!-- </user-service> -->
 		<!-- </authentication-provider> -->
 		<authentication-provider user-service-ref="userService">
-			<password-encoder hash="bcrypt" />
+			<password-encoder hash="sha-256" />
 		</authentication-provider>
 	</authentication-manager>
 
-	<beans:bean id="userService" class="com.**.user.service.impl.UserServiceImpl" />
+	<beans:bean id="userService" class="com.lcs.tele.security.loginservice.UserServiceImpl" />
 
 	<!-- 认证成功调用 主要实现AuthenticationSuccessHandler这个类的onAuthenticationSuccess方法 -->
 	<beans:bean id="authenticationSuccessHandlerImpl"
-		class="com.**.utils.springsecurity.AuthenticationSuccessHandlerImpl">
-		<beans:property name="url" value="/welcome.jsp" />
+		class="com.lcs.tele.security.handler.AuthenticationSuccessHandlerImpl">
+		<beans:property name="url" value="/telecom/welcome.jsp" />
 	</beans:bean>
 
 	<!-- 认证失败调用 主要实现AuthenticationFailureHandler类的onAuthenticationFailure -->
 	<beans:bean id="authenticationFailureHandlerImpl"
-		class="com.**.utils.springsecurity.AuthenticationFailureHandlerImpl">
-		<beans:property name="errorUrl" value="/error.jsp" />
+		class="com.lcs.tele.security.handler.AuthenticationFailureHandlerImpl">
+		<beans:property name="errorUrl" value="/telecom/error.jsp" />
 	</beans:bean>
 
 </beans:beans>

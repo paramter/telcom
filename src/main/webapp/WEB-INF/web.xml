@@ -4,11 +4,18 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>Archetype Created Web Application</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<listener>  
+	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+	</listener> 
 	<!-- 扫描并加载所有xml文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:*.xml</param-value>
 	</context-param>
+	
 	<!-- Spring Secutiry4.1的过滤器链配置 -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
