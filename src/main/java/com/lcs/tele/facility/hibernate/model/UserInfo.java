@@ -1,5 +1,5 @@
 package com.lcs.tele.facility.hibernate.model;
-// Generated 2017-2-15 17:56:02 by Hibernate Tools 3.6.0.Final
+// Generated 2017-2-23 11:42:54 by Hibernate Tools 3.6.0.Final
 
 import java.util.Date;
 
@@ -12,14 +12,16 @@ public class UserInfo implements java.io.Serializable {
 	private String userName;
 	private String password;
 	private Date createTime;
+	private Date lstTime;
 
 	public UserInfo() {
 	}
 
-	public UserInfo(String userName, String password, Date createTime) {
+	public UserInfo(String userName, String password, Date createTime, Date lstTime) {
 		this.userName = userName;
 		this.password = password;
 		this.createTime = createTime;
+		this.lstTime = lstTime;
 	}
 
 	public Integer getId() {
@@ -52,6 +54,14 @@ public class UserInfo implements java.io.Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Date getLstTime() {
+		return this.lstTime;
+	}
+
+	public void setLstTime(Date lstTime) {
+		this.lstTime = lstTime;
 	}
 
 }

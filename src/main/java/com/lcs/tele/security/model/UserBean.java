@@ -29,6 +29,9 @@ public class UserBean implements UserDetails{
 		this.authorities = authorities;
 	}
 
+	public UserBean() {
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -87,4 +90,5 @@ public class UserBean implements UserDetails{
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
+
 }

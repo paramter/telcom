@@ -7,38 +7,55 @@
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<debug />
-	<http security="none" pattern="/index.jsp" />
+	<http security="none" pattern="/index.jsp"/>
+	<http security="none" pattern="/**/*.jsp" />
+	<http security="none" pattern="/register.jsp"/>
+	<http security="none" pattern="/register.do"/>
+	<http security="none" pattern="/mvcServer/*"/>
+	
 	<http use-expressions="true" auto-config="true">
-		<!-- <intercept-url pattern="/**" access="hasRole('ROLE_USER')" /> -->
-		<!-- 同一时间内允许同一账号保持4个在线,error-if-maximum-exceeded="true"表示第第四个以后的登不进去 -->
+		<intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!-- 同一时间内允许同一账号保持1个在线,error-if-maximum-exceeded="true"表示第第1个以后的登不进去 -->
 		<session-management>
 			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
 		</session-management>
 		<csrf disabled="true" />
 		<!-- 指定登录地址、登录请求字段以及登录成功|失败的响应页面 -->
-		<form-login login-page="/index.jsp" 
+		<form-login login-page="/login.jsp" 
 			login-processing-url="/j_spring_security_check"	
-			username-parameter="loginName"
-			password-parameter="loginPwd"
+			username-parameter="j_username"
+			password-parameter="password"
+			default-target-url="/index.jsp" always-use-default-target="true"
 			authentication-failure-handler-ref="authenticationFailureHandlerImpl"
 			authentication-success-handler-ref="authenticationSuccessHandlerImpl" />
-		<logout logout-success-url="/index.jsp" logout-url="logout"
+		<logout logout-success-url="/login.jsp" logout-url="logout"
 			invalidate-session="true" delete-cookies="JSESSIONID" />
 	</http>
 	
+	<!-- bcryptEncoder加密 -->
+	<beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</beans:bean>
+	
+	<beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+	    <beans:property name="userPropertyToUse" value="username"/>
+	</beans:bean>
+	
+	<!-- 用户信息服务 -->
+	<beans:bean id="userService" class="com.lcs.tele.security.loginservice.UserServiceImpl" />
+	
 	<!-- 用户认证策略 -->
 	<authentication-manager>
-		<!-- <authentication-provider> -->
-		<!-- <user-service> -->
-		<!-- <user name="admin" password="123" authorities="ROLE_USER"/> -->
-		<!-- </user-service> -->
-		<!-- </authentication-provider> -->
 		<authentication-provider user-service-ref="userService">
-			<password-encoder hash="sha-256" />
+			<password-encoder ref="bcryptEncoder"/>
 		</authentication-provider>
 	</authentication-manager>
-
-	<beans:bean id="userService" class="com.lcs.tele.security.loginservice.UserServiceImpl" />
+	
+	 <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <!-- 是否显示用户名不存在信息 -->
+        <beans:property name="hideUserNotFoundExceptions" value="false"/>
+        <beans:property name="userDetailsService" ref="userService"/>
+        <beans:property name="passwordEncoder" ref="bcryptEncoder"/>
+    </beans:bean>
 
 	<!-- 认证成功调用 主要实现AuthenticationSuccessHandler这个类的onAuthenticationSuccess方法 -->
 	<beans:bean id="authenticationSuccessHandlerImpl"

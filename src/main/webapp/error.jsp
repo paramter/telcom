@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+<title>登录失败</title>
 </head>
 <body>
-	<h2>访问页面出错!</h2>
+	<h2>访问页面出错!<font color="red">${requestScope.error}</font></h2>
 </body>
 </html>
